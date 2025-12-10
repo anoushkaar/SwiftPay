@@ -1,4 +1,27 @@
+import axios from "axios";
+import { useState } from "react";
+import useStore from "../../zustand/store.js";
+
 export default function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { auth } = useStore();
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/user/login",
+        { email, password },
+        { withCredentials: true }
+      );
+      auth(response.data.user);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -9,7 +32,7 @@ export default function SignIn() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6">
+          <form onSubmit={handleSignIn} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -19,6 +42,7 @@ export default function SignIn() {
               </label>
               <div className="mt-2">
                 <input
+                  onChange={(e) => setEmail(e.target.value)}
                   id="email"
                   name="email"
                   type="email"
@@ -48,6 +72,7 @@ export default function SignIn() {
               </div>
               <div className="mt-2">
                 <input
+                  onChange={(e) => setPassword(e.target.value)}
                   id="password"
                   name="password"
                   type="password"

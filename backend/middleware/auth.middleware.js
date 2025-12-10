@@ -1,9 +1,12 @@
+import { request } from 'express';
 import jwt from 'jsonwebtoken';
 
 export const isLoggedIn = async (req, res, next) => {
   console.log('isLoggedIn called');
+  console.log(req.cookies);
+  
   try {
-    const token = req.cookies.test;
+    const token = req.cookies.token;
     console.log('token', token);
     if (!token) {
       console.log('no token found');
@@ -22,5 +25,3 @@ export const isLoggedIn = async (req, res, next) => {
     });
   }
 };
-
-// 9003143125
